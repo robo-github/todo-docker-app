@@ -1,0 +1,34 @@
+version: '3.8'
+
+# docker-compose defines and runs multi-container Docker applications
+services:
+
+  # ---- Backend Service ----
+  backend:
+    build: ./backend          # Build image from backend/Dockerfile
+    container_name: todo-backend
+    ports:
+      - "5000:5000"           # host_port:container_port
+    environment:
+      - PORT=5000
+    networks:
+      - todo-network          # Connect to shared network
+
+  # ---- Frontend Service ----
+  frontend:
+    build: ./frontend         # Build image from frontend/Dockerfile
+    container_name: todo-frontend
+    ports:
+      - "3000:3000"           # Access app at http://localhost:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true   # Needed for hot-reload in Docker
+    depends_on:
+      - backend               # Wait for backend to start first
+    networks:
+      - todo-network
+
+# ---- Shared Network ----
+# Both containers talk to each other using service names (e.g. http://backend:5000)
+networks:
+  todo-network:
+    driver: bridge
