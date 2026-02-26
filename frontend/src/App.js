@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
-const API = '/api/todos';
+const API = 'https://todo-docker-app-pmp0.onrender.com/api/todos';
 
 function App() {
   const [todos, setTodos] = useState([]);
